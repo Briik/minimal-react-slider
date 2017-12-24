@@ -7,18 +7,18 @@ export default class Slider extends PureComponent {
     this.state = { value: this.props.value }
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({ value: nextProps.value })
+    if (nextProps.value !== this.props.value) {
+      this.setState({ value: nextProps.value });
+    }
   }
-  onChange = (event) => {
+  onChange(event) {
     event.preventDefault();
-    console.log(event.target);
     this.setState({value: event.target.value});
-    if (this.props.onChange) { this.props.onChange(event) };
+    if (this.props.onChange) { this.props.onChange(event); };
   }
-  render = () => {
+  render() {
     return (
       <div key={this.props.key} className="slider-container">
-      {this.state.value}
         <input
         type='range'
         min={this.props.min}
@@ -26,7 +26,7 @@ export default class Slider extends PureComponent {
         className={`slider${this.props.cssClass ? ('' + this.props.cssClass) :'' }`}
         id={this.props.id ? this.props.id : 'slider-no-id'}
         value={this.state.value}
-        onChange={this.onChange}
+        onChange={this.onChange.bind(this)}
         />
       </div>
     );
@@ -36,7 +36,7 @@ export default class Slider extends PureComponent {
 Slider.propTypes = {
     min: PropTypes.string.isRequired,
     max: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
+    value: PropTypes.string,
     cssClass: PropTypes.string,
     id: PropTypes.string,
     key: PropTypes.string,
